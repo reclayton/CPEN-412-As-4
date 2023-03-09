@@ -115,7 +115,7 @@ set_global_assignment -name VECTOR_OUTPUT_FORMAT VWF
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL OFF
+set_global_assignment -name TIMING_ANALYZER_DO_CCPP_REMOVAL OFF
 set_global_assignment -name QII_AUTO_PACKED_REGISTERS NORMAL
 set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
@@ -128,7 +128,7 @@ set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -from Clk_50Mhz -to *
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE "C:/M68kV6.0 - 640by480/Waveform68k_V13.0.vwf"
 set_global_assignment -name EDA_GENERATE_RTL_SIMULATION_COMMAND_SCRIPT OFF -section_id eda_simulation
 set_global_assignment -name EDA_GENERATE_GATE_LEVEL_SIMULATION_COMMAND_SCRIPT OFF -section_id eda_simulation
-set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
 set_location_assignment PIN_AA20 -to RS232_RxData
 set_location_assignment PIN_AC22 -to RS232_TxData
 set_location_assignment PIN_AF14 -to CLOCK_50
