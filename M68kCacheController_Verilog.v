@@ -171,7 +171,21 @@ module M68kCacheController_Verilog (
 // Main IDLE state: 
 ///////////////////////////////////////////////
 		else if(CurrentState == Idle) begin	  							// if we are in the idle state				
-
+			if(!AS_L && DramSelect68k_H) begin
+				if(WE_L) begin
+					UDS_DramController_L <= 0;
+					LDS_DramController_L <= 0;
+					NextState <= CheckForCacheHit;
+				end
+				else begin
+					if(ValidBitIn_H) begin
+						ValidBitOut_H <= 0;
+						ValidBit_WE_L <= 0;
+					end
+					DramSelectFromCache_L <= 0;
+					NextState <= WriteDataToDram;
+				end
+			end
 		end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +193,17 @@ module M68kCacheController_Verilog (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		else if(CurrentState == CheckForCacheHit) begin	  			// if we are looking for Cache hit			
-
+			UDS_DramController_L <= 0;
+			LDS_DramController_L <= 0;
+			if(CacheHit_H && ValidBitIn_H) begin
+				WordAddress <= AddressBusInFrom68k[3:1];
+				DtackTo68k_L <= 0;
+				NextState <= WaitForEndOfCacheRead;
+			end
+			else begin
+				DramSelectFromCache_L <= 0;
+				NextState <= ReadDataFromDramIntoCache;
+			end
 		end	
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +211,13 @@ module M68kCacheController_Verilog (
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 		else if(CurrentState == WaitForEndOfCacheRead) begin		
+			UDS_DramController_L <= 0;	
+			LDS_DramController_L <= 0;
+			WordAddress <= AddressBusInFrom68k[3:1];
+			DtackTo68k_L <= 0;
 
+			if(!AS_L) 
+				NextState <= WaitForEndOfCacheRead;
 		end
 			
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +225,21 @@ module M68kCacheController_Verilog (
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		else if(CurrentState == ReadDataFromDramIntoCache) begin
+			NextState <= ReadDataFromDramIntoCache;
 
+			if (!CAS_Dram_L && RAS_Dram_L) begin
+				NextState <= CASDelay1;
+			end
+
+			DramSelectFromCache_L <= 0;
+			DtackTo68k_L <= 1;
+
+			TagCache_WE_L <= 0;
+			ValidBitOut_H <= 1;
+			ValidBit_WE_L <= 0;
+
+			UDS_DramController_L <= 0;	
+			LDS_DramController_L <= 0;
 		end
 						
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +247,13 @@ module M68kCacheController_Verilog (
 ///////////////////////////////////////////////////////////////////////////////////////
 			
 		else if(CurrentState == CASDelay1) begin						// wait for Dram case signal to go low
+			UDS_DramController_L <= 0;	
+			LDS_DramController_L <= 0;
 
+			DramSelectFromCache_L <= 0;
+			DtackTo68k_L <= 1;
+
+			NextState <= CASDelay2;
 		end
 				
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +261,12 @@ module M68kCacheController_Verilog (
 ///////////////////////////////////////////////////////////////////////////////////////
 			
 		else if(CurrentState == CASDelay2) begin						// wait for Dram case signal to go low
+			UDS_DramController_L <= 0;	
+			LDS_DramController_L <= 0;
 
+			DtackTo68k_L <= 1;
+			BurstCounterReset_L <= 0;
+			NextState <= BurstFill;
 		end
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,21 +274,57 @@ module M68kCacheController_Verilog (
 /////////////////////////////////////////////////////////////////////////////////////////////
 		
 		else if(CurrentState == BurstFill) begin						// wait for Dram case signal to go low
+			UDS_DramController_L <= 0;	
+			LDS_DramController_L <= 0;
 
+			DramSelectFromCache_L <= 0;
+			DtackTo68k_L <= 1;
+
+			if (BurstCounter == 8) begin
+				NextState <= EndBurstFill;
+			end
+			else begin
+				WordAddress <= BurstCounter[2:0];
+				DataCache_WE_L <= 0;
+				NextState <= BurstFill;
+			end
 		end
 			
 ///////////////////////////////////////////////////////////////////////////////////////
 // End Burst fill
 ///////////////////////////////////////////////////////////////////////////////////////
 		else if(CurrentState == EndBurstFill) begin							// wait for Dram case signal to go low
+			DramSelectFromCache_L <= 1;
+			DtackTo68k_L <= 0;
+			
+			UDS_DramController_L <= 0;	
+			LDS_DramController_L <= 0;
 
+			WordAddress <= AddressBusInFrom68k[3:1];
+			DataBusOutTo68k <= DataBusInFromCache;
+
+			if (AS_L || !DramSelect68k_H) begin
+				NextState <= Idle;
+			end
+			else begin
+				NextState <= EndBurstFill;
+			end
 		end
 
 ///////////////////////////////////////////////
 // Write Data to Dram State (no Burst)
 ///////////////////////////////////////////////
 		else if(CurrentState == WriteDataToDram) begin	  					// if we are writing data to Dram
+			AddressBusOutToDramController <= AddressBusInFrom68k;
+			DramSelectFromCache_L <= 0;
+			DtackTo68k_L <= DtackFromDram_L;
 
+			if(AS_L || ! DramSelect68k_H) begin
+				NextState <= Idle;
+			end
+			else begin
+				NextState <= WriteDataToDram;
+			end
 		end
 	end
 endmodule
