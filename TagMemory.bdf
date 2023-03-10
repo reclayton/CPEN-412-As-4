@@ -37,22 +37,6 @@ refer to the applicable agreement for further details.
 )
 (pin
 	(input)
-	(rect 152 256 320 272)
-	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
-	(text "Index[4..0]" (rect 5 0 53 17)(font "Intel Clear" ))
-	(pt 168 8)
-	(drawing
-		(line (pt 84 12)(pt 109 12))
-		(line (pt 84 4)(pt 109 4))
-		(line (pt 113 8)(pt 168 8))
-		(line (pt 84 12)(pt 84 4))
-		(line (pt 109 4)(pt 113 8))
-		(line (pt 109 12)(pt 113 8))
-	)
-	(text "VCC" (rect 128 7 148 17)(font "Arial" (font_size 6)))
-)
-(pin
-	(input)
 	(rect 152 224 320 240)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
 	(text "WE_L" (rect 5 0 33 17)(font "Intel Clear" ))
@@ -69,9 +53,25 @@ refer to the applicable agreement for further details.
 )
 (pin
 	(input)
+	(rect 152 256 320 272)
+	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
+	(text "Index[8..0]" (rect 5 0 54 17)(font "Intel Clear" ))
+	(pt 168 8)
+	(drawing
+		(line (pt 84 12)(pt 109 12))
+		(line (pt 84 4)(pt 109 4))
+		(line (pt 113 8)(pt 168 8))
+		(line (pt 84 12)(pt 84 4))
+		(line (pt 109 4)(pt 113 8))
+		(line (pt 109 12)(pt 113 8))
+	)
+	(text "VCC" (rect 128 7 148 17)(font "Arial" (font_size 6)))
+)
+(pin
+	(input)
 	(rect 144 192 320 208)
 	(text "INPUT" (rect 133 0 161 10)(font "Arial" (font_size 6)))
-	(text "TagDataIn[22..0]" (rect 5 0 88 12)(font "Arial" ))
+	(text "TagDataIn[18..0]" (rect 5 0 88 12)(font "Arial" ))
 	(pt 176 8)
 	(drawing
 		(line (pt 92 12)(pt 117 12))
@@ -87,7 +87,7 @@ refer to the applicable agreement for further details.
 	(output)
 	(rect 840 208 1032 224)
 	(text "OUTPUT" (rect 1 0 39 10)(font "Arial" (font_size 6)))
-	(text "TagDataOut[22..00]" (rect 90 0 186 12)(font "Arial" ))
+	(text "TagDataOut[18..00]" (rect 90 0 186 12)(font "Arial" ))
 	(pt 0 8)
 	(drawing
 		(line (pt 0 8)(pt 52 8))
@@ -131,8 +131,8 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 0 32)
 		(input)
-		(text "data[22..0]" (rect 0 0 60 14)(font "Arial" (font_size 8)))
-		(text "data[22..0]" (rect 4 16 64 30)(font "Arial" (font_size 8)))
+		(text "data[18..0]" (rect 0 0 60 14)(font "Arial" (font_size 8)))
+		(text "data[18..0]" (rect 4 16 64 30)(font "Arial" (font_size 8)))
 		(line (pt 0 32)(pt 88 32)(line_width 3))
 	)
 	(port
@@ -145,8 +145,8 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 0 64)
 		(input)
-		(text "address[4..0]" (rect 0 0 75 14)(font "Arial" (font_size 8)))
-		(text "address[4..0]" (rect 4 48 79 62)(font "Arial" (font_size 8)))
+		(text "address[8..0]" (rect 0 0 75 14)(font "Arial" (font_size 8)))
+		(text "address[8..0]" (rect 4 48 79 62)(font "Arial" (font_size 8)))
 		(line (pt 0 64)(pt 88 64)(line_width 3))
 	)
 	(port
@@ -159,13 +159,13 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 216 32)
 		(output)
-		(text "q[22..0]" (rect 0 0 42 14)(font "Arial" (font_size 8)))
-		(text "q[22..0]" (rect 169 16 211 30)(font "Arial" (font_size 8)))
+		(text "q[18..0]" (rect 0 0 42 14)(font "Arial" (font_size 8)))
+		(text "q[18..0]" (rect 169 16 211 30)(font "Arial" (font_size 8)))
 		(line (pt 216 32)(pt 136 32)(line_width 3))
 	)
 	(drawing
-		(text "23 bits" (rect 106 29 118 62)(font "Arial" )(vertical))
-		(text "32 words" (rect 120 15 132 58)(font "Arial" )(vertical))
+		(text "19 bits" (rect 106 29 118 62)(font "Arial" )(vertical))
+		(text "512 words" (rect 120 16 132 65)(font "Arial" )(vertical))
 		(text "Block type: AUTO" (rect 48 111 137 123)(font "Arial" ))
 		(line (pt 104 24)(pt 136 24))
 		(line (pt 136 24)(pt 136 96))

@@ -1,0 +1,3 @@
+Base: 107s
+32 line cache: 72s
+512 line cache: 60s
